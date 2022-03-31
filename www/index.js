@@ -1,19 +1,27 @@
 import { memory } from "game-of-life/game_of_life_bg";
 import { Universe, Cell } from "game-of-life";
 
-const CELL_SIZE = 5;
+const CELL_SIZE = 8;
 const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
-const universe = Universe.new();
-const width = universe.width();
-const height = universe.height();
+let width = 50;
+let height = 50;
+
+const createUniverse = (width, height) => {
+  return Universe.new(width, height);
+};
+
+const updateCanvas = () => {
+  canvas.height = (CELL_SIZE + 1) * height + 1;
+  canvas.width = (CELL_SIZE + 1) * width + 1;
+};
+
+let universe = createUniverse(width, height);
 
 const canvas = document.getElementById("game-of-life-canvas");
-canvas.height = (CELL_SIZE + 1) * height + 1;
-canvas.width = (CELL_SIZE + 1) * width + 1;
-
+updateCanvas(canvas);
 const ctx = canvas.getContext("2d");
 
 // Event listener for play button
@@ -24,11 +32,30 @@ btn.addEventListener("click", () => {
   requestAnimationFrame(renderLoop);
 });
 
-// Update slider value
+// Update timestep slider value
 let timeStep = 10;
 const slider = document.getElementById("slider");
 slider.oninput = function () {
   timeStep = this.value;
+};
+
+// Create new universe on width or height update
+const widthSlider = document.getElementById("width-slider");
+widthSlider.oninput = function () {
+  width = this.value;
+  universe = createUniverse(width, height);
+  updateCanvas(canvas);
+  drawGrid();
+  drawCells();
+};
+
+const heightSlider = document.getElementById("height-slider");
+heightSlider.oninput = function () {
+  height = this.value;
+  universe = createUniverse(width, height);
+  updateCanvas(canvas);
+  drawGrid();
+  drawCells();
 };
 
 let isPaused = true;

@@ -73,6 +73,13 @@ impl Universe {
         self.cells = next;
     }
 
+    pub fn toggle_cell(&mut self, i: usize) {
+        self.cells[i] = match self.cells[i] {
+            Cell::Alive => Cell::Dead,
+            Cell::Dead => Cell::Alive,
+        };
+    }
+
     pub fn width(&self) -> u32 {
         self.width
     }

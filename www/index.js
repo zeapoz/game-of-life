@@ -1,7 +1,7 @@
 import { memory } from "game-of-life/game_of_life_bg";
 import { Universe, Cell } from "game-of-life";
 
-const CELL_SIZE = 8;
+const CELL_SIZE = 10;
 const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
@@ -23,6 +23,19 @@ let universe = createUniverse(width, height);
 const canvas = document.getElementById("game-of-life-canvas");
 updateCanvas(canvas);
 const ctx = canvas.getContext("2d");
+
+// Event listener for painting cells
+canvas.addEventListener("click", (e) => {
+  let offset = canvas.getBoundingClientRect();
+
+  let row = Math.floor((e.clientY - offset.top) / (CELL_SIZE + 1));
+  let col = Math.floor((e.clientX - offset.left) / (CELL_SIZE + 1));
+
+  let i = getIndex(row, col);
+
+  universe.toggle_cell(i);
+  drawCells();
+});
 
 // Event listener for play button
 const btn = document.getElementById("play-pause-button");
